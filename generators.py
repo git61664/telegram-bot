@@ -17,11 +17,19 @@ from image_helper import generate_slide_image
 from locales import t
 
 
+def _is_conclusion_point(point: str, language: str) -> bool:
+    """Foydalanuvchi o'zi 'Xulosa'/'Заключение'/'Conclusion' nomli bo'lim
+    kiritgan bo'lsa, bot buni ikkilantirib qo'shmasligi uchun tekshiradi."""
+    conclusion_words = {"xulosa", "заключение", "conclusion"}
+    return point.strip().lower() in conclusion_words
+
+
 # ==================== PPTX (Slayd) ====================
 def create_pptx(topic: str, points: list, output_path: str, language: str = "uz"):
     prs = Presentation()
+    slide_width_in = prs.slide_width / 914400  # EMU -> inches
 
-    # Titul slaydi (rasm bilan)
+    # Titul slaydi
     title_slide_layout = prs.slide_layouts[0]
     slide = prs.slides.add_slide(title_slide_layout)
     slide.shapes.title.text = topic
@@ -37,19 +45,28 @@ def create_pptx(topic: str, points: list, output_path: str, language: str = "uz"
         body = slide.placeholders[1]
         body.text_frame.text = ai_text
 
-        # O'ng tomonga kichik dekorativ rasm qo'shish
+        # Rasm uchun joy ajratib, matn qutisini TORAYTIRAMIZ (overlap bo'lmasligi uchun)
+        img_width = Inches(1.8)
+        img_margin_right = Inches(0.5)
+        img_left = Inches(slide_width_in) - img_width - img_margin_right
+
+        # Matn qutisi rasm boshlanishidan oldin tugashi kerak
+        text_right_edge = img_left - Inches(0.3)
+        body.width = text_right_edge - body.left
+
         try:
             img_path = generate_slide_image(point)
             slide.shapes.add_picture(
-                img_path, Inches(7.8), Inches(1.5), width=Inches(1.8), height=Inches(1.0)
+                img_path, img_left, Inches(1.5), width=img_width, height=Inches(1.0)
             )
         except Exception:
             pass  # rasm qo'shilmasa ham fayl yaratilishda davom etadi
 
-    # Xulosa slaydi
-    slide = prs.slides.add_slide(bullet_layout)
-    slide.shapes.title.text = t(language, "conclusion_title")
-    slide.placeholders[1].text = t(language, "conclusion_text")
+    # Xulosa slaydi — foydalanuvchi allaqachon shu nomli bo'lim kiritgan bo'lsa, qo'shmaymiz
+    if not points or not _is_conclusion_point(points[-1], language):
+        slide = prs.slides.add_slide(bullet_layout)
+        slide.shapes.title.text = t(language, "conclusion_title")
+        slide.placeholders[1].text = t(language, "conclusion_text")
 
     prs.save(output_path)
 
@@ -73,8 +90,9 @@ def create_docx(topic: str, points: list, output_path: str, language: str = "uz"
         doc.add_paragraph(ai_text)
         doc.add_paragraph("")
 
-    doc.add_heading(t(language, "conclusion_title"), level=1)
-    doc.add_paragraph(t(language, "conclusion_text"))
+    if not points or not _is_conclusion_point(points[-1], language):
+        doc.add_heading(t(language, "conclusion_title"), level=1)
+        doc.add_paragraph(t(language, "conclusion_text"))
 
     doc.save(output_path)
 
@@ -111,9 +129,10 @@ def create_pdf(topic: str, points: list, output_path: str, language: str = "uz")
         pdf.multi_cell(0, 8, ai_text)
         pdf.ln(5)
 
-    pdf.set_font("Helvetica", "B", 14)
-    pdf.cell(0, 10, t(language, "conclusion_title"), ln=True)
-    pdf.set_font("Helvetica", "", 12)
-    pdf.multi_cell(0, 8, t(language, "conclusion_text"))
+    if not points or not _is_conclusion_point(points[-1], language):
+        pdf.set_font("Helvetica", "B", 14)
+        pdf.cell(0, 10, t(language, "conclusion_title"), ln=True)
+        pdf.set_font("Helvetica", "", 12)
+        pdf.multi_cell(0, 8, t(language, "conclusion_text"))
 
     pdf.output(output_path)
