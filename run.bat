@@ -36,7 +36,7 @@ echo  [*] Bot ishga tushmoqda...
 echo.
 
 :: Botni ishga tushirish
-"%PYTHON%" main.py --calib %*
+"%PYTHON%" main.py %*
 
 echo.
 pause
