@@ -15,42 +15,45 @@ pyautogui.PAUSE    = 0.0     # Har amal orasida kutish yo'q
 class Controller:
 
     def __init__(self):
-        self._held: str | None = None
+        self._held: set[str] = set()
         self._last: str        = "—"
 
     # ── ichki yordamchi ──────────────────────────────────────
     def _release(self):
-        if self._held:
+        for key in tuple(self._held):
             try:
-                pyautogui.keyUp(self._held)
+                pyautogui.keyUp(key)
             except Exception:
                 pass
-            self._held = None
+        self._held.clear()
 
     def _hold(self, key: str):
-        if self._held != key:
-            self._release()
+        if key not in self._held:
             pyautogui.keyDown(key)
-            self._held = key
+            self._held.add(key)
+
+    def _hold_movement(self):
+        self._hold(KEY_FORWARD)
+        self._hold(KEY_PRESSING)
 
     # ── ochiq metodlar ───────────────────────────────────────
     def press_forward(self):
-        """W — oldinga yurish (bosib turadi)."""
-        self._hold(KEY_FORWARD)
-        self._last = "W (forward)"
+        """W+B — doimiy oldinga yurish va pressing."""
+        self._hold_movement()
+        self._last = "W+B (forward/pressing)"
 
     def press_pressing(self):
-        """B — pressing yoki low kick (bosib turadi)."""
-        self._hold(KEY_PRESSING)
-        self._last = "B (pressing)"
+        """W+B — doimiy oldinga yurish va pressing."""
+        self._hold_movement()
+        self._last = "W+B (forward/pressing)"
 
     def shoot(self):
-        """J — zarba (bir marta, SHOOT_HOLD_TIME davomida)."""
-        self._release()
+        """W+B ni saqlagan holda J ni 200 ms bosadi."""
+        self._hold_movement()
         pyautogui.keyDown(KEY_SHOOT)
-        time.sleep(SHOOT_HOLD_TIME)
+        time.sleep(0.2)
         pyautogui.keyUp(KEY_SHOOT)
-        self._last = "J (shoot) ⚽"
+        self._last = "W+B + J (shoot)"
 
     def release_all(self):
         """Barcha tugmalarni qo'yib yuboradi (bot to'xtaganda)."""
@@ -69,4 +72,4 @@ class Controller:
 
     @property
     def held_key(self) -> str | None:
-        return self._held
+        return "+".join(sorted(self._held)) or None

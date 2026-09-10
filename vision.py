@@ -55,6 +55,10 @@ class GoalInfo:
     cy:        int   = -1
     direction: str   = "center"   # left | center | right
     distance:  str   = "far"      # far | medium | close
+    x:         int   = -1
+    y:         int   = -1
+    width:     int   = 0
+    height:    int   = 0
 
 
 # ============================================================
@@ -227,10 +231,15 @@ class VisionSystem:
                     x, y, w, h = cv2.boundingRect(cnt)
                     cx, cy = x + w // 2, y + h // 2
 
+                x, y, w, h = cv2.boundingRect(cnt)
                 info.found = True
                 info.area  = area
                 info.cx    = cx
                 info.cy    = cy
+                info.x     = x
+                info.y     = y
+                info.width = w
+                info.height = h
 
                 # Yo'nalish
                 mid = self.fw // 2
@@ -278,6 +287,10 @@ class VisionSystem:
         # ── Darvoza ──
         if goal.found:
             gc = (50, 50, 255)
+            cv2.rectangle(d,
+                          (goal.x, goal.y),
+                          (goal.x + goal.width, goal.y + goal.height),
+                          gc, 2)
             cv2.circle(d, (goal.cx, goal.cy), 16, gc, 3)
             cv2.putText(d,
                 f"GOAL {goal.distance.upper()} {goal.direction} ({int(goal.area)}px)",
