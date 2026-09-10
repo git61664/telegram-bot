@@ -296,7 +296,8 @@ class VisionSystem:
                     cv2.FONT_HERSHEY_SIMPLEX, 0.65, status_c, 2)
 
         # To'p holati
-        ball_t = f"BALL: {'BIZDA ✓  ' if own.owned else 'YO\\'Q ✗ '} [{own.method}]"
+        ball_status = "BIZDA ✓  " if own.owned else "YO'Q ✗ "
+        ball_t = f"BALL: {ball_status} [{own.method}]"
         ball_c = (0, 230, 0) if own.owned else (0, 80, 255)
         cv2.putText(d, ball_t, (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.58, ball_c, 2)
