@@ -8,7 +8,7 @@ import json, os
 # ============================================================
 #  HOTKEY TUGMALARI
 # ============================================================
-KEY_BOT_START = 'f1'   # F1 = Bot yoqish
+KEY_BOT_START = 'f6'   # F6 = Bot yoqish
 KEY_BOT_STOP  = 'f2'   # F2 = Bot o'chirish
 KEY_QUIT      = 'f4'   # F4 = Dasturdan to'liq chiqish
 

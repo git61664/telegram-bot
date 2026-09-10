@@ -304,7 +304,7 @@ class VisionSystem:
 
         # Bot holati
         status_c = (0, 230, 0) if bot_active else (0, 60, 255)
-        status_t = "● ACTIVE  [F2=stop]" if bot_active else "● PAUSED  [F1=start]"
+        status_t = "● ACTIVE  [F2=stop]" if bot_active else "● PAUSED  [F6=start]"
         cv2.putText(d, status_t, (10, 24),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.65, status_c, 2)
 
@@ -320,7 +320,7 @@ class VisionSystem:
             f"STATE: {state:<10}  marker={own.marker_px}px  btn={own.btn_px}px",
             (10, 74), cv2.FONT_HERSHEY_SIMPLEX, 0.42, (180, 180, 180), 1)
 
-        cv2.putText(d, "F1=START  F2=STOP  F4=QUIT",
+        cv2.putText(d, "F6=START  F2=STOP  F4=QUIT",
             (10, 94), cv2.FONT_HERSHEY_SIMPLEX, 0.38, (120, 120, 255), 1)
 
         return d

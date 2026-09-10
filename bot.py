@@ -2,7 +2,7 @@
 #  bot.py  —  Asosiy bot logikasi
 #
 #  HOTKEYS:
-#    F1  →  Bot YOQISH
+#    F6  →  Bot YOQISH
 #    F2  →  Bot O'CHIRISH (pauza)
 #    F4  →  Dasturdan TO'LIQ CHIQISH
 #
@@ -55,7 +55,7 @@ class GameBot:
 
         self.ctrl          = Controller()
         self.state         = self.S_PAUSED
-        self._active       = False      # F1/F2 boshqaradi
+        self._active       = False      # F6/F2 boshqaradi
         self._running      = False      # Ana tsikl
         self._last_shoot   = 0.0
         self._frame_delay  = 1.0 / BOT_FPS
@@ -172,7 +172,7 @@ class GameBot:
                     else:
                         print(
                             f"\r  [PAUSED]  "
-                            f"F1 bosing → botni yoqish ...",
+                            f"F6 bosing → botni yoqish ...",
                             end="", flush=True
                         )
 
@@ -183,7 +183,7 @@ class GameBot:
                     )
                     cv2.imshow("DLS Bot", dbg)
                     key = cv2.waitKey(1) & 0xFF
-                    if key == ord('1'):      # oynada ham F1 o'rniga '1'
+                    if key == ord('1'):      # oynada ham F6 o'rniga '1'
                         self._on_start()
                     elif key == ord('2'):    # oynada ham F2 o'rniga '2'
                         self._on_stop()

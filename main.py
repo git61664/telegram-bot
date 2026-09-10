@@ -7,7 +7,7 @@
 #    python main.py --no-gui  ← Debug oynasisiz (tezroq)
 #
 #  HOTKEY'LAR:
-#    F1  →  Bot YOQISH
+#    F6  →  Bot YOQISH
 #    F2  →  Bot O'CHIRISH (pauza)
 #    F4  →  Dasturdan chiqish
 # ============================================================
@@ -56,7 +56,7 @@ BANNER = r"""
 def print_banner():
     print(BANNER)
     print("  ┌──────────────────────────────────────┐")
-    print("  │  F1  =  Bot YOQISH                   │")
+    print("  │  F6  =  Bot YOQISH                   │")
     print("  │  F2  =  Bot O'CHIRISH (pauza)         │")
     print("  │  F4  =  Dasturdan CHIQISH             │")
     print("  └──────────────────────────────────────┘")
@@ -136,7 +136,7 @@ def main():
     print("  ✅ Hamma narsa tayyor!")
     print()
     print("  Bot ishga tushmoqda...")
-    print("  DLS o'yiniga o'ting va F1 bosing!")
+    print("  DLS o'yiniga o'ting va F6 bosing!")
     print()
 
     from bot import GameBot
