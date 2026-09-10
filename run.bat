@@ -17,10 +17,17 @@ if %errorLevel% neq 0 (
 )
 
 :: Python mavjudligini tekshirish
-set "PYTHON=python"
-python --version >nul 2>&1
-if %errorLevel% neq 0 set "PYTHON=%LocalAppData%\Programs\Python\Python312\python.exe"
-if not exist "%PYTHON%" (
+set "PYTHON="
+if exist "%LocalAppData%\Programs\Python\Python312\python.exe" set "PYTHON=%LocalAppData%\Programs\Python\Python312\python.exe"
+if not defined PYTHON (
+    where python >nul 2>&1
+    if not errorlevel 1 set "PYTHON=python"
+)
+if not defined PYTHON (
+    where py >nul 2>&1
+    if not errorlevel 1 set "PYTHON=py"
+)
+if not defined PYTHON (
     echo  [!] Python topilmadi!
     echo      https://python.org dan yuklab o'rnating.
     pause
