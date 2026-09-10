@@ -62,9 +62,9 @@ class GameBot:
         self._lock         = threading.Lock()
 
         # Hotkey'larni ro'yxatdan o'tkazish
-        keyboard.add_hotkey(KEY_BOT_START, self._on_start, suppress=False)
-        keyboard.add_hotkey(KEY_BOT_STOP,  self._on_stop,  suppress=False)
-        keyboard.add_hotkey(KEY_QUIT,      self._on_quit,  suppress=False)
+        keyboard.add_hotkey(KEY_BOT_START, self._on_start, suppress=True)
+        keyboard.add_hotkey(KEY_BOT_STOP,  self._on_stop,  suppress=True)
+        keyboard.add_hotkey(KEY_QUIT,      self._on_quit,  suppress=True)
 
         print(f"[Bot] Hotkey'lar tayyor:  "
               f"{KEY_BOT_START.upper()}=yoqish  "

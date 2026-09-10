@@ -17,8 +17,10 @@ if %errorLevel% neq 0 (
 )
 
 :: Python mavjudligini tekshirish
+set "PYTHON=python"
 python --version >nul 2>&1
-if %errorLevel% neq 0 (
+if %errorLevel% neq 0 set "PYTHON=%LocalAppData%\Programs\Python\Python312\python.exe"
+if not exist "%PYTHON%" (
     echo  [!] Python topilmadi!
     echo      https://python.org dan yuklab o'rnating.
     pause
@@ -27,14 +29,14 @@ if %errorLevel% neq 0 (
 
 :: Kutubxonalarni o'rnatish (agar kerak bo'lsa)
 echo  [*] Kutubxonalar tekshirilmoqda...
-pip install -r requirements.txt -q --disable-pip-version-check
+"%PYTHON%" -m pip install -r requirements.txt -q --disable-pip-version-check
 
 echo.
 echo  [*] Bot ishga tushmoqda...
 echo.
 
 :: Botni ishga tushirish
-python main.py %*
+"%PYTHON%" main.py --calib %*
 
 echo.
 pause
